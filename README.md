@@ -1,5 +1,8 @@
 # 🎵 Theremin corporal
 
+Alumno: Enciso Mayo José Jesús.
+Curso: Introducción a la cognición.
+
 **Instrumento musical - Implementación de cognición corporizada y extendida**
 
 [![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://www.python.org/)
