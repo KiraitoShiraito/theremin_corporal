@@ -1,0 +1,173 @@
+<!-- frontend/index.html -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theremin Corporal</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>🎵 Theremin Corporal</h1>
+            <p>Controla el sonido con el movimiento de tus manos</p>
+        </header>
+
+        <!-- Panel Principal -->
+        <main class="main-content">
+            <!-- Sección de Video -->
+            <section class="video-section">
+                <div class="video-container">
+                    <div class="video-placeholder" id="videoPlaceholder">
+                        <div class="placeholder-content">
+                            <div class="camera-icon">📷</div>
+                            <p>Video en vivo se mostrará aquí</p>
+                            <button class="btn-primary" id="startBtn">Iniciar Cámara</button>
+                        </div>
+                    </div>
+                    <canvas id="videoCanvas" class="video-canvas" style="display: none;"></canvas>
+                </div>
+                
+                <div class="video-controls">
+                    <button class="btn-secondary" id="toggleVideoBtn" disabled>
+                        <span class="btn-icon">👁️</span>
+                        Ocultar Video
+                    </button>
+                    <div class="fps-counter">
+                        <span id="fpsCounter">0 FPS</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de Control -->
+            <section class="control-section">
+                <!-- Panel de Estado -->
+                <div class="status-panel">
+                    <h3>Estado del Sistema</h3>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <span class="status-label">Theremin:</span>
+                            <span class="status-value" id="thereminStatus">Detenido</span>
+                            <div class="status-indicator" id="thereminIndicator"></div>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Manos Detectadas:</span>
+                            <span class="status-value" id="handsStatus">0/2</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Frecuencia:</span>
+                            <span class="status-value" id="frequencyValue">440 Hz</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Volumen:</span>
+                            <span class="status-value" id="volumeValue">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controles de Audio -->
+                <div class="audio-controls">
+                    <h3>Controles de Audio</h3>
+                    
+                    <div class="control-group">
+                        <label for="waveTypeSelect">Forma de Onda:</label>
+                        <select id="waveTypeSelect" class="form-select">
+                            <option value="sine">Sinusoidal</option>
+                            <option value="square">Cuadrada</option>
+                            <option value="sawtooth">Sierra</option>
+                            <option value="triangle">Triangular</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Rango de Frecuencia:</label>
+                        <div class="range-display">
+                            <span id="minFreq">200 Hz</span>
+                            <span>a</span>
+                            <span id="maxFreq">1000 Hz</span>
+                        </div>
+                    </div>
+
+                    <div class="control-buttons">
+                        <button class="btn-success" id="startThereminBtn" disabled>
+                            <span class="btn-icon">🎵</span>
+                            Iniciar Theremin
+                        </button>
+                        <button class="btn-danger" id="stopThereminBtn" disabled>
+                            <span class="btn-icon">⏹️</span>
+                            Detener Theremin
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Visualizador de Audio -->
+                <div class="visualizer">
+                    <h3>Visualizador</h3>
+                    <div class="visualizer-container">
+                        <canvas id="audioVisualizer" width="300" height="80"></canvas>
+                    </div>
+                    <div class="visualizer-info">
+                        <div class="viz-bar">
+                            <div class="viz-label">Frecuencia</div>
+                            <div class="viz-meter">
+                                <div class="viz-fill" id="freqMeter"></div>
+                            </div>
+                        </div>
+                        <div class="viz-bar">
+                            <div class="viz-label">Volumen</div>
+                            <div class="viz-meter">
+                                <div class="viz-fill" id="volMeter"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Instrucciones -->
+        <section class="instructions">
+            <h3>🎯 Cómo Usar</h3>
+            <div class="instructions-grid">
+                <div class="instruction-item">
+                    <div class="instruction-icon">👈</div>
+                    <div class="instruction-text">
+                        <strong>Mano Izquierda:</strong> Controla el volumen
+                    </div>
+                </div>
+                <div class="instruction-item">
+                    <div class="instruction-icon">👉</div>
+                    <div class="instruction-text">
+                        <strong>Mano Derecha:</strong> Controla la frecuencia
+                    </div>
+                </div>
+                <div class="instruction-item">
+                    <div class="instruction-icon">⬆️</div>
+                    <div class="instruction-text">
+                        <strong>Arriba:</strong> Más agudo / Más volumen
+                    </div>
+                </div>
+                <div class="instruction-item">
+                    <div class="instruction-icon">⬇️</div>
+                    <div class="instruction-text">
+                        <strong>Abajo:</strong> Más grave / Menos volumen
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Theremin Corporal</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/theremin-controller.js"></script>
+    <script src="js/ui-manager.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

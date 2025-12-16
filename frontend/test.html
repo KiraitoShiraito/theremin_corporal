@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Theremin API</title>
+</head>
+<body>
+    <h1>Test Theremin API</h1>
+    
+    <div>
+        <button onclick="testHealth()">Test Health</button>
+        <button onclick="testStatus()">Test Status</button>
+        <button onclick="testFrame()">Test Frame</button>
+        <button onclick="testStart()">Test Start</button>
+    </div>
+    
+    <div id="results"></div>
+    
+    <script>
+        const backendUrl = 'http://127.0.0.1:5000';
+        const resultsDiv = document.getElementById('results');
+        
+        async function testHealth() {
+            try {
+                const response = await fetch(`${backendUrl}/api/health`);
+                const data = await response.json();
+                resultsDiv.innerHTML = `<pre>Health: ${JSON.stringify(data, null, 2)}</pre>`;
+                console.log('Health:', data);
+            } catch (error) {
+                resultsDiv.innerHTML = `<pre>Error Health: ${error.message}</pre>`;
+                console.error('Health error:', error);
+            }
+        }
+        
+        async function testStatus() {
+            try {
+                const response = await fetch(`${backendUrl}/api/status`);
+                const data = await response.json();
+                resultsDiv.innerHTML = `<pre>Status: ${JSON.stringify(data, null, 2)}</pre>`;
+                console.log('Status:', data);
+            } catch (error) {
+                resultsDiv.innerHTML = `<pre>Error Status: ${error.message}</pre>`;
+                console.error('Status error:', error);
+            }
+        }
+        
+        async function testFrame() {
+            try {
+                const response = await fetch(`${backendUrl}/api/frame`);
+                const data = await response.json();
+                resultsDiv.innerHTML = `<pre>Frame success: ${data.success}</pre>`;
+                console.log('Frame:', { 
+                    success: data.success, 
+                    frameLength: data.frame ? data.frame.length : 0 
+                });
+                
+                if (data.success && data.frame) {
+                    const img = document.createElement('img');
+                    img.src = `data:image/jpeg;base64,${data.frame}`;
+                    img.style.width = '320px';
+                    resultsDiv.appendChild(img);
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<pre>Error Frame: ${error.message}</pre>`;
+                console.error('Frame error:', error);
+            }
+        }
+        
+        async function testStart() {
+            try {
+                const response = await fetch(`${backendUrl}/api/start`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                resultsDiv.innerHTML = `<pre>Start: ${JSON.stringify(data, null, 2)}</pre>`;
+                console.log('Start:', data);
+            } catch (error) {
+                resultsDiv.innerHTML = `<pre>Error Start: ${error.message}</pre>`;
+                console.error('Start error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
